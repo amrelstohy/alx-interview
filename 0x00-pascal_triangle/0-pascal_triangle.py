@@ -1,8 +1,8 @@
 def pascal_triangle(n, triangle=[]):
     len_triangle = len(triangle)
-    if n < 1 :
+    if n < 1:
         return triangle
-    
+
     if len_triangle < n:
         if len_triangle == 0:
             triangle.append([1])
@@ -15,7 +15,7 @@ def pascal_triangle(n, triangle=[]):
                 row.append(value)
                 row.append(value)
                 break
-            elif index == 0  :
+            elif index == 0:
                 row.append(value)
             elif index == len_last_row - 1:
                 row.append(value + last_row[index - 1])
