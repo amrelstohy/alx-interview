@@ -3,6 +3,7 @@
 
 
 def canUnlockAll(boxes):
+    """Lockboxes"""
     keys = boxes[0]
 
     if 0 not in boxes:
