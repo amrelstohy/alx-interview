@@ -4,6 +4,10 @@
 
 def canUnlockAll(boxes):
     """Lockboxes"""
+
+    if not isinstance(boxes, list):
+        return False
+
     keys = boxes[0]
 
     if 0 not in boxes:
