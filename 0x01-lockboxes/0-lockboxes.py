@@ -15,7 +15,7 @@ def canUnlockAll(boxes):
         keys.append(0)
 
     for key in keys:
-        if key > num_boxes:
+        if key > num_boxes - 1:
             keys.remove(key)
             continue
 
