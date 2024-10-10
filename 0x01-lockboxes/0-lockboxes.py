@@ -5,9 +5,6 @@
 def canUnlockAll(boxes):
     """Lockboxes"""
 
-    if not isinstance(boxes, list):
-        return False
-
     keys = boxes[0]
     num_boxes = len(boxes)
 
