@@ -15,9 +15,11 @@ status_codes_count = {
     500: 0
 }
 
+
 def signal_handler(sig, frame):
     print_metrics()
     sys.exit(0)
+
 
 def print_metrics():
     print("File size: {}".format(total_size))
@@ -25,9 +27,13 @@ def print_metrics():
         if status_codes_count[code] > 0:
             print("{}: {}".format(code, status_codes_count[code]))
 
+
 signal.signal(signal.SIGINT, signal_handler)
 
-log_entry_regex = r'(\d{1,3}(?:\.\d{1,3}){3}) - \[(.+?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)'
+log_entry_regex = (
+    r'(\d{1,3}(?:\.\d{1,3}){3}) - \[(.+?)\] "GET /projects/260 HTTP/1.1" '
+    r'(\d{3}) (\d+)'
+)
 
 lines_count = 0
 
