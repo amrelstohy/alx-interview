@@ -1,36 +1,49 @@
 #!/usr/bin/python3
-"""Module"""
-import re
 import sys
-
-log_pattern = re.compile(
-    r'(\d{1,3}(?:\.\d{1,3}){3}) - \[(.*?)\] '
-    r'"GET /projects/260 HTTP/1\.1" (200|301|400|401|403|404|405|500) (\d+)'
-)
+import re
+import signal
 
 total_size = 0
-status_count = {code: 0 for code in [200, 301, 400, 401, 403, 404, 405, 500]}
-line_count = 0
+status_codes_count = {
+    200: 0,
+    301: 0,
+    400: 0,
+    401: 0,
+    403: 0,
+    404: 0,
+    405: 0,
+    500: 0
+}
 
-try:
-    for line in sys.stdin:
-        match = log_pattern.match(line)
-        if match:
-            file_size = int(match.group(4))
-            status_code = int(match.group(3))
+def signal_handler(sig, frame):
+    print_metrics()
+    sys.exit(0)
 
-            total_size += file_size
-            status_count[status_code] += 1
-            line_count += 1
+def print_metrics():
+    print("File size: {}".format(total_size))
+    for code in sorted(status_codes_count):
+        if status_codes_count[code] > 0:
+            print("{}: {}".format(code, status_codes_count[code]))
 
-            if line_count % 10 == 0:
-                print("File size: {}".format(total_size))
-                for code in sorted(status_count):
-                    if status_count[code] > 0:
-                        print("{}: {}".format(code, status_count[code]))
+signal.signal(signal.SIGINT, signal_handler)
 
-except KeyboardInterrupt:
-    print("\nFile size: {}".format(total_size))
-    for code in sorted(status_count):
-        if status_count[code] > 0:
-            print("{}: {}".format(code, status_count[code]))
+log_entry_regex = r'(\d{1,3}(?:\.\d{1,3}){3}) - \[(.+?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)'
+
+lines_count = 0
+
+for line in sys.stdin:
+    match = re.match(log_entry_regex, line)
+    if match:
+        status_code = int(match.group(3))
+        file_size = int(match.group(4))
+
+        total_size += file_size
+        if status_code in status_codes_count:
+            status_codes_count[status_code] += 1
+
+        lines_count += 1
+
+        if lines_count % 10 == 0:
+            print_metrics()
+
+print_metrics()
