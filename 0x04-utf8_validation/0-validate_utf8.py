@@ -29,7 +29,7 @@ def validUTF8(data):
                        format(data[index + i], '08b')[:2] == '10'
                        for i in range(1, 4)
                 ):
-                    index += 3
+                    index += 4
                     continue
                 else:
                     return False
@@ -42,7 +42,7 @@ def validUTF8(data):
                     format(data[index + i], '08b')[:2] == '10'
                     for i in range(1, 3)
                 ):
-                    index += 2
+                    index += 3
                     continue
                 else:
                     return False
@@ -52,7 +52,7 @@ def validUTF8(data):
         elif bin_byte[0:3] == '110':
             try:
                 if format(data[index + 1], '08b')[:2] == '10':
-                    index += 1
+                    index += 2
                     continue
                 else:
                     return False
