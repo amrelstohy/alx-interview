@@ -18,15 +18,15 @@ def validUTF8(data):
 
         if not isinstance(byte, int):
             return False
-        if byte > 255 or byte < 0:
+        if byte < 0:
             return False
 
-        bin_byte = format(byte, '08b')
+        bin_byte = format(byte & 0xFF, '08b')
 
         if bin_byte[0:5] == '11110':
             try:
                 if all(
-                       format(data[index + i], '08b')[:2] == '10'
+                       format(data[index + i] & 0xFF, '08b')[:2] == '10'
                        for i in range(1, 4)
                 ):
                     index += 4
@@ -39,7 +39,7 @@ def validUTF8(data):
         elif bin_byte[0:4] == '1110':
             try:
                 if all(
-                    format(data[index + i], '08b')[:2] == '10'
+                    format(data[index + i] & 0xFF, '08b')[:2] == '10'
                     for i in range(1, 3)
                 ):
                     index += 3
@@ -51,7 +51,7 @@ def validUTF8(data):
 
         elif bin_byte[0:3] == '110':
             try:
-                if format(data[index + 1], '08b')[:2] == '10':
+                if format(data[index + 1] & 0xFF, '08b')[:2] == '10':
                     index += 2
                     continue
                 else:
